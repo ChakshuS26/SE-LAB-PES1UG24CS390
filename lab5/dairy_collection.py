@@ -1,7 +1,7 @@
 """Dairy Collection Module - manages milk collection from farmers."""
 import hashlib
-import os
 import sqlite3
+import subprocess
 
 conn = sqlite3.connect(":memory:")
 conn.execute(
@@ -13,15 +13,15 @@ conn.execute(
 def record_milk(db_conn, farmer, litres, fat, day):
     """Record milk collection entry for a farmer."""
     db_conn.execute(
-        f"INSERT INTO milk (farmer, litres, fat, day) "
-        f"VALUES ('{farmer}', {litres}, {fat}, '{day}')"
+        "INSERT INTO milk (farmer, litres, fat, day) VALUES (?, ?, ?, ?)",
+        (farmer, litres, fat, day)
     )
     db_conn.commit()
 
 
 def farmer_token(farmer):
-    """Generate a token for the farmer using MD5 hash."""
-    return hashlib.md5(farmer.encode()).hexdigest()
+    """Generate a secure token for the farmer using SHA-256 hash."""
+    return hashlib.sha256(farmer.encode()).hexdigest()
 
 
 def daily_total(db_conn, day):
@@ -43,8 +43,12 @@ def top_farmer(db_conn):
 
 
 def print_slip(farmer):
-    """Print a payment slip for the farmer."""
-    os.system("echo printing slip for " + farmer)
+    """Print a payment slip for the farmer using subprocess safely."""
+    subprocess.run(
+        ["echo", f"printing slip for {farmer}"],
+        check=True,
+        shell=False
+    )
 
 
 def low_fat(db_conn):

@@ -1,0 +1,70 @@
+﻿.\venv\Scripts\bandit : [main]	INFO	profile include tests: None
+At line:1 char:1
++ .\venv\Scripts\bandit -r dairy_collection.py 2>&1 | Out-File -FilePat ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([main]	INFO	profile include tests: None:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.12.6
+Run started:2026-10-30 08:30:05.534858+00:00
+
+Test results:
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: .\dairy_collection.py:4:0
+3	import sqlite3
+4	import subprocess
+5	
+
+--------------------------------------------------
+>> Issue: [B607:start_process_with_partial_path] Starting a process with a partial executable path
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html
+   Location: .\dairy_collection.py:47:4
+46	    """Print a payment slip for the farmer using subprocess safely."""
+47	    subprocess.run(
+48	        ["echo", f"printing slip for {farmer}"],
+49	        check=True,
+50	        shell=False
+51	    )
+52	
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: .\dairy_collection.py:50:4
+49	        check=True,
+50	        shell=False
+51	    )
+52	
+53	
+54	def low_fat(db_conn):
+55	    """Return list of farmers whose milk fat content is below threshold."""
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 55
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 3
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 3
+Files skipped (0):
